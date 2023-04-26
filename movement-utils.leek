@@ -1,0 +1,28 @@
+i include('map-utils')
+
+function getReachableCellsWithDistance(sourceCell, mp) {
+	var cellsToAnalyse = [sourceCell]
+	var discoveredCells = []
+	var reachableCells = [sourceCell:0]
+	
+	for (var distance = 1; distance <= mp; distance++) {
+		for (var cell in cellsToAnalyse) {
+			var adjacentCells = getWalkableAdjacentCells(cell)
+			for (var adjacentCell in adjacentCells) {
+				if (mapContainsKey(reachableCells, adjacentCell)) continue
+				
+				push(discoveredCells, adjacentCell)
+				mapPut(reachableCells, adjacentCell, distance)
+			}
+		}
+		
+		cellsToAnalyse = discoveredCells
+		discoveredCells = []
+	}
+	
+	return reachableCells
+}
+
+function getReachableCells(sourceCell, mp) {
+	return mapKeys(getReachableCellsWithDistance(sourceCell, mp))
+}
